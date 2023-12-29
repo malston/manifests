@@ -21,9 +21,15 @@ spec:
         - name: ngrok
           image: ngrok:3
           imagePullPolicy: Always
-          args: ['http', 'atlantis:80']
+          args: ['http', 'atlantis:80', '--authtoken', "$(NGROK_AUTHTOKEN)"]
           ports:
             - containerPort: 4040
+          env:
+            - name: NGROK_AUTHTOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: k3d-ngrok
+                  key: NGROK_AUTHTOKEN
           resources:
             requests:
               cpu: 200m
